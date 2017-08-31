@@ -91,15 +91,20 @@ tst_docker_build_dockerfile_template()
             LAST_LINE="$ln"
         fi
     done < <(
-        cd "$DOCKER_WORKING_DIR" || exit 1
+        cd "$DOCKER_WORKING_DIR" || return 1
         docker build --no-cache=true --rm=true \
             $DOCKER_TAG_ARGUMENT \
             $DOCKER_CONTEXT_ARGUMENT \
-            <"$DOCKERFILE_PATH" \
+            <"$DOCKERFILE_PATH"
     )
-    if [ -n "$IMAGE_ID_VAR_NAME" ]; then
-        declare -g "$IMAGE_ID_VAR_NAME=${LAST_LINE#Successfully built }"
-    fi
 
     rm "$DOCKERFILE_PATH"
+
+    if [ "${LAST_LINE#Successfully built }" == "$LAST_LINE" ]; then
+        return 1
+    else
+        if [ -n "$IMAGE_ID_VAR_NAME" ]; then
+            declare -g "$IMAGE_ID_VAR_NAME=${LAST_LINE#Successfully built }"
+        fi
+    fi
 }
