@@ -130,9 +130,10 @@ else
     tst_docker_build_dockerfile_template \
         "$SELF_DIR/../docker/$DOCKER_TEMPLATE_NAME" \
         "" \
-        IMAGE_ID
+        IMAGE_ID || exit 1
 
-    CONTAINER_ID=$(docker create "$IMAGE_ID")    
-    docker cp "$CONTAINER_ID:/root/rpmbuild/RPMS" "$SELF_DIR/../build/"
-    docker rm -v "$CONTAINER_ID"
+    CONTAINER_ID=$(docker create "$IMAGE_ID") || exit 1    
+    docker cp "$CONTAINER_ID:/root/rpmbuild/RPMS" "$SELF_DIR/../build/" || exit 1
+    docker rm -v "$CONTAINER_ID" || exit 1
+    docker rmi -f "$IMAGE_ID"
 fi
