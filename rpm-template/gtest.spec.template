@@ -14,15 +14,15 @@ License: BSD
 URL: https://github.com/google/googletest
 Source: release-%{version}.tar.gz
 BuildRoot: %{build_root}
-Prefix: /opt/rh/devtoolset-2/root
+Prefix: /opt/rh/devtoolset-%{devtoolset_version}/root
 BuildRequires: cmake
-BuildRequires: devtoolset-2-toolchain
+BuildRequires: devtoolset-%{devtoolset_version}-toolchain
 BuildRequires: tar
 
 %description
 A unit test framework for C++.
 
-You need to source /opt/rh/devtoolset-2/enable to add the shared library to
+You need to source /opt/rh/devtoolset-%{devtoolset_version}/enable to add the shared library to
 `ldconfig`'s path.
 
 %prep
@@ -31,6 +31,7 @@ You need to source /opt/rh/devtoolset-2/enable to add the shared library to
 %build
 mkdir build
 cd build
+source /opt/rh/devtoolset-%{devtoolset_version}/enable
 cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_CXX_FLAGS=-fPIC ..
 make
 cd ..
