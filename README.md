@@ -19,8 +19,14 @@ The built RPMs will end up under `build/RPMS`.
 
 You'll need to have Docker installed, if you're not running on RHEL 6.
 
-You'll need a username and password for a registered user Red Hat user with a
+You'll need a username and password for a registered Red Hat user with a
 RHEL 6 subscription (to be able to access Yum packages).
 
 The RPMs will be built for the processor your machine is running.
 Cross-compilation has not been implemented.
+
+To clean build files:
+
+```BASH
+./bin/clean.sh
+```
