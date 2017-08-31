@@ -98,6 +98,12 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
+mkdir -p "$SELF_DIR/../build/BUILD" \
+         "$SELF_DIR/../build/RPMS" \
+         "$SELF_DIR/../build/SOURCES" \
+         "$SELF_DIR/../build/SPECS" \
+         "$SELF_DIR/../build/SRPMS"
+
 # Download the googletest source:
 (
     cd "$SELF_DIR/../build/SOURCES"
