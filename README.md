@@ -30,3 +30,7 @@ To clean build files:
 ```BASH
 ./bin/clean.sh
 ```
+
+To use `gtest` with a devtoolset on RHEL 6 install the built RPM, and
+`source /opt/rh/devtoolset-2/enable` (substituting the version of the
+devtoolset you are using).
