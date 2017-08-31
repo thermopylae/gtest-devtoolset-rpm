@@ -1,0 +1,29 @@
+# We only need a few context files, rather than the whole repository:
+# --[ TST-Dockerfile: context-dir=build ]--
+# Prompt the user to enter variables required to build this Dockerfile:
+# --[ TST-Dockerfile: required-vars=REDHAT_USERNAME ]--
+# Avoid displaying the values of some variables:
+# --[ TST-Dockerfile: required-password-vars=REDHAT_PASSWORD ]--
+
+FROM registry.access.redhat.com/rhel6
+
+#   We register the Docker image with the Red Hat repository provider (you
+# need to have a username and password) so we can install Yum packages.  We
+# unregister when we finish, so we're not taking up a machine license.
+RUN subscription-manager register \
+        --username=${REDHAT_USERNAME_ESCAPED} --password=${REDHAT_PASSWORD_ESCAPED} \
+        --auto-attach && \
+    yum update -y && \
+    yum install -y cmake devtoolset-2-toolchain rpm-build tar
+
+# We're done installing packages from Yum repositories.  Unregister our RHEL
+# subscription to free up the license:
+RUN subscription-manager unregister
+
+# Build gtest with the devtooset-2-toolchain so it works
+# with the GCC compiler from that toolchain.
+RUN mkdir -p /root/rpmbuild
+COPY . /root/rpmbuild
+RUN cd /root/rpmbuild && \
+    source /opt/rh/devtoolset-2/enable && \
+    rpmbuild -v -bb --clean SPECS/gtest-devtoolset${DEVTOOLSET_VERSION}-${GTEST_VERSION}.spec
