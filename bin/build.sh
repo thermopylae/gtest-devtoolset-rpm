@@ -130,7 +130,7 @@ if [ -z "$USE_DOCKER" ]; then
     (
         cd "$SELF_DIR/../build" && \
         source /opt/rh/devtoolset-2/enable && \
-        rpmbuild -v -bb --clean SPECS/gtest-devtoolset${DEVTOOLSET_VERSION}-${GTEST_VERSION}.spec
+        rpmbuild --define "_topdir $(pwd)" -v -bb --clean SPECS/gtest-devtoolset${DEVTOOLSET_VERSION}-${GTEST_VERSION}.spec
     )
 else
     if [ -z "$INHERIT_HOST_SUBSCRIPTION" ]; then
