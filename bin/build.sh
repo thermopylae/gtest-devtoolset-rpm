@@ -7,8 +7,14 @@ SELF_DIR=$(dirname "$0")
 
 GTEST_VERSION=1.8.0
 DEVTOOLSET_VERSION=2
-USE_DOCKER=yes
-if [ -f /etc/system-release ] && grep -q "Red Hat Enterprise Linux" /etc/os-release
+
+if type docker >/dev/null; then
+    USE_DOCKER=yes
+else
+    USE_DOCKER=""
+fi
+
+if [ -f /etc/system-release ] && grep -q "Red Hat Enterprise Linux" /etc/system-release
 then
     INHERIT_HOST_SUBSCRIPTION="yes"
 else
