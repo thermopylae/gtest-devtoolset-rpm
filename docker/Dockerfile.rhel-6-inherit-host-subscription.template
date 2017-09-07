@@ -1,0 +1,18 @@
+# We only need a few context files, rather than the whole repository:
+# --[ TST-Dockerfile: context-dir=build ]--
+
+FROM registry.access.redhat.com/rhel6
+
+#   We register the Docker image with the Red Hat repository provider (you
+# need to have a username and password) so we can install Yum packages.  We
+# unregister when we finish, so we're not taking up a machine license.
+RUN yum update -y && \
+    yum install -y cmake devtoolset-2-toolchain rpm-build tar
+
+# Build gtest with the devtooset-2-toolchain so it works
+# with the GCC compiler from that toolchain.
+RUN mkdir -p /root/rpmbuild
+COPY . /root/rpmbuild
+RUN cd /root/rpmbuild && \
+    source /opt/rh/devtoolset-2/enable && \
+    rpmbuild -v -bb --clean SPECS/gtest-devtoolset${DEVTOOLSET_VERSION}-${GTEST_VERSION}.spec
